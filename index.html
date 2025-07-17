@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Te Amo</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff4f4;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    #game-container {
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #complex-shape {
+      width: 0;
+      height: 0;
+      border-left: 100px solid transparent;
+      border-right: 100px solid transparent;
+      border-bottom: 200px solid #ff4d6d;
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    #complex-shape::after {
+      content: '';
+      position: absolute;
+      top: 60px;
+      left: -100px;
+      width: 0;
+      height: 0;
+      border-left: 100px solid transparent;
+      border-right: 100px solid transparent;
+      border-top: 200px solid #ff4d6d;
+    }
+
+    #message {
+      font-size: 1.8rem;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    #i-love-u {
+      font-size: 2.5rem;
+      color: #e6005c;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    #custom-message {
+      margin-top: 10px;
+      font-size: 1.6rem;
+      font-weight: 500;
+    }
+
+    #blue-l {
+      color: #0066ff;
+      font-size: 2rem;
+      margin-top: 8px;
+    }
+
+    #footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 1rem;
+      color: #999;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <div id="complex-shape"></div>
+  </div>
+
+  <div id="message">
+    <div id="i-love-u">Te amo, mi vida entera.</div>
+    <div id="blue-l">L</div>
+  </div>
+
+  <div id="footer">made by lucas, tu amorcito</div>
+
+  <script>
+    let timeInside = 0;
+    let mouseOverShape = false;
+
+    const gameContainer = document.getElementById('game-container');
+    const message = document.getElementById('message');
+    const shape = document.getElementById('complex-shape');
+
+    shape.addEventListener('mouseenter', () => {
+      mouseOverShape = true;
+      timeInside = 0;
+    });
+
+    shape.addEventListener('mouseleave', () => {
+      mouseOverShape = false;
+    });
+
+    setInterval(() => {
+      if (mouseOverShape) {
+        timeInside += 1;
+        if (timeInside >= 60) { // ~3 seconds
+          gameContainer.classList.add('hidden');
+          message.style.display = 'flex';
+        }
+      }
+    }, 50);
+  </script>
+</body>
+</html>
