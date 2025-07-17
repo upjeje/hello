@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rolling Ball Te Amo</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #fff4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+  }
+  #game-area {
+    position: relative;
+    width: 400px;
+    height: 250px;
+    background: #ffd6d6;
+    border-radius: 20px;
+    border: 3px solid #ff4d6d;
+    cursor: pointer;
+  }
+  #ball {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #ff4d6d;
+    border-radius: 50%;
+    top: 100px;
+    left: 20px;
+    transition: left 0.1s, top 0.1s;
+  }
+  #goal {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: #e6005c;
+    border-radius: 50%;
+    top: 95px;
+    right: 20px;
+    border: 3px solid #ff4d6d;
+  }
+  #message {
+    margin-top: 30px;
+    text-align: center;
+    display: none;
+    animation: fadeIn 1s ease forwards;
+  }
+  #message h1 {
+    font-size: 2.5rem;
+    color: #e6005c;
+    margin: 0;
+  }
+  #message #blue-l {
+    color: #0066ff;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-top: 8px;
+  }
+  #footer {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: #999;
+  }
+  @keyframes fadeIn {
+    0% {opacity: 0; transform: translateY(20px);}
+    100% {opacity: 1; transform: translateY(0);}
+  }
+</style>
+</head>
+<body>
+
+<div id="game-area">
+  <div id="ball"></div>
+  <div id="goal"></div>
+</div>
+
+<div id="message">
+  <h1>Te amo, mi vida entera.</h1>
+  <div id="blue-l">L</div>
+</div>
+
+<div id="footer">made by lucas, tu amorcito</div>
+
+<script>
+  const ball = document.getElementById('ball');
+  const gameArea = document.getElementById('game-area');
+  const goal = document.getElementById('goal');
+  const message = document.getElementById('message');
+
+  let dragging = false;
+
+  // Permitir arrastrar la bola con el mouse
+  ball.addEventListener('mousedown', () => {
+    dragging = true;
+  });
+  window.addEventListener('mouseup', () => {
+    dragging = false;
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!dragging) return;
+
+    const rect = gameArea.getBoundingClientRect();
+    let x = e.clientX - rect.left - ball.offsetWidth / 2;
+    let y = e.clientY - rect.top - ball.offsetHeight / 2;
+
+    // Limitar la pelota dentro del área de juego
+    x = Math.max(0, Math.min(x, rect.width - ball.offsetWidth));
+    y = Math.max(0, Math.min(y, rect.height - ball.offsetHeight));
+
+    ball.style.left = x + 'px';
+    ball.style.top = y + 'px';
+
+    checkGoalCollision(x, y);
+  });
+
+  function checkGoalCollision(x, y) {
+    const goalRect = goal.getBoundingClientRect();
+    const ballRect = ball.getBoundingClientRect();
+
+    // Comparar si la pelota y el objetivo se están tocando
+    const overlap = !(ballRect.right < goalRect.left ||
+                      ballRect.left > goalRect.right ||
+                      ballRect.bottom < goalRect.top ||
+                      ballRect.top > goalRect.bottom);
+
+    if (overlap) {
+      // Mostrar mensaje y ocultar el juego
+      gameArea.style.display = 'none';
+      message.style.display = 'block';
+    }
+  }
+</script>
+
+</body>
+</html>
